@@ -1,0 +1,106 @@
+import pygame
+import random
+pygame.init()  
+pygame.display.set_caption("BreakOut") 
+screen = pygame.display.set_mode((900, 900))
+doExit = False
+clock = pygame.time.Clock()
+bx = 350
+by = 250
+bVx = 5
+bVy = 5
+ball_size = 20
+p1x = 450
+p1y = 800
+
+class brick:
+    def __init__(self,xpos,ypos):
+        self.xpos = xpos
+        self.ypos = ypos
+        self.color = (random.randrange(100,250),random.randrange(100,250),random.randrange(100,250))
+        self.isDead = False
+    def draw(self):
+        if not self.isDead :
+            pygame.draw.rect(screen,self.color,(self.xpos,self.ypos,100,50))
+        pygame.draw.rect(screen,self.color,(self.xpos,self.ypos,100,50))
+    def collide(self,ball_x,ball_y):
+        if not self.isDead:
+            if (ball_x + ball_size > self.xpos and
+                ball_x < self.xpos + 100 and
+                ball_y + ball_size > self.ypos and
+                ball_y < self.ypos + 50):
+                self.isDead = True
+                return True
+            return False
+                
+                
+                        
+ 
+b1 = brick(50,50)
+b2 = brick(160,50)
+b3 = brick(270,50)
+b4 = brick(380,50)
+b5 = brick(490,50)
+b6 = brick(600,50)
+b7 = brick(710,50)
+b8 = brick(820,50)
+
+
+while not doExit:
+    
+    clock.tick(60)
+    #physics-----------------------------------------------------
+    
+    bx += bVx
+    by += bVy
+    
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        p1x-= 5
+    
+    if keys[pygame.K_RIGHT]:
+        p1x+=5
+        
+        
+    if bx < p1x + 20 and by + 20 > p1y and by < p1y + 100:
+        bVx *= -1    
+    
+    if bx < 0:
+        bVx *= -1
+        
+    if   bx > 900:
+        bVx *= -1
+    
+    if b1.collide(bx, by):
+        bvy *= -1
+    if b2.collide(bx, by):
+        bvy *= -1
+    if b3.collide(bx, by):
+        bvy *= -1
+    if b4.collide(bx, by):
+        bvy *= -1
+    if b5.collide(bx, by):
+        bvy *= -1
+        
+    
+    
+    
+    # render-----------------------------------------------------
+    screen.fill((0,0,0))
+    
+    pygame.draw.rect(screen,(255,255,255), (p1x, p1y, 100, 20), 1)
+    b1.draw()
+    b2.draw()
+    b3.draw()
+    b4.draw()
+    b5.draw()
+    b6.draw()
+    b7.draw()
+    pygame.draw.circle(screen,(255,255,255), (bx, by),5)
+    
+    
+    
+    pygame.display.flip()
+    
+    
+pygame.quit()
